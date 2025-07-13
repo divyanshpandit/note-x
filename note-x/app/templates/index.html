@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Centered logo + tagline -->
+<div class="hero">
+  <h1 class="logo">ℕ𝕆𝕋𝔼‑𝕏</h1>
+  <p class="tagline">𝙰𝚜𝚔 𝚊𝚗𝚢 𝚝𝚘𝚙𝚒𝚌 𝚊𝚗𝚍 𝚍𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚊 𝙿𝙳𝙵 𝚘𝚏 𝚌𝚘𝚗𝚌𝚒𝚜𝚎 𝚜𝚝𝚞𝚍𝚢 𝚗𝚘𝚝𝚎𝚜.</p>
+</div>
+
+<!-- Message zone (spinner / download button injected here) -->
+<div id="msg-zone" class="msg-zone"></div>
+
+<!-- Typing bar -->
+<div class="typing-container">
+  <div class="typing-content">
+    <form method="post" class="typing-textarea" id="prompt-form">
+      <textarea id="chat-input" name="topic"
+                placeholder="Enter a topic..." required></textarea>
+      <span id="send-btn" class="material-symbols-rounded" role="button">send</span>
+    </form>
+    <div class="typing-controls">
+      <span id="theme-btn"  class="material-symbols-rounded" role="button">light_mode</span>
+      <span id="delete-btn" class="material-symbols-rounded" role="button">delete</span>
+    </div>
+  </div>
+</div>
+
+<!-- Spinner template -->
+<template id="spinner-tmpl">
+  <div class="orbit-loader">
+    <div></div><div></div><div></div><div></div>
+  </div>
+</template>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
+{% endblock %}
