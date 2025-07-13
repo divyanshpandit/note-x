@@ -9,7 +9,7 @@ services:
       - FLASK_ENV=production
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - SECRET_KEY=${SECRET_KEY}
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     depends_on:
       - redis
     command: gunicorn -b 0.0.0.0:8000 run:create_app()
@@ -22,9 +22,10 @@ services:
       - FLASK_ENV=production
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - SECRET_KEY=${SECRET_KEY}
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
     command: celery -A tasks.celery worker --loglevel=info
 
   redis:
-    image: redis:alpine
-    command: ["redis-server", "--requirepass", ""]
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
