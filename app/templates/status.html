@@ -2,13 +2,9 @@
 
 {% block content %}
 <div class="card center" style="text-align:center;">
-  <!-- Spinner (visible at first) -->
   <div id="spinner" class="orbit-loader">
-  <div></div><div></div><div></div><div></div>
-</div>
-
-
-  <!-- Message placeholder -->
+    <div></div><div></div><div></div><div></div>
+  </div>
   <h2 id="msg" style="margin-top:1.2rem;">Generating…</h2>
 </div>
 {% endblock %}
@@ -26,7 +22,7 @@ async function poll() {
   } else if (data.state === "FAILURE") {
     document.getElementById("spinner").style.display = "none";
     document.getElementById("msg").textContent =
-      "Failed: " + (data.error ?? "unknown error");
+      "Failed: " + (data.result?.error || "unknown error");
   } else {
     setTimeout(poll, 3000);
   }
