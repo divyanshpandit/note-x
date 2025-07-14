@@ -1,48 +1,38 @@
-# app/routes.py
 from flask import (
     Blueprint, render_template, request, redirect,
     url_for, send_file, jsonify
 )
-from celery.result import AsyncResult
+from tasks import start_generate_notes_task, get_task_result
 
 main = Blueprint("main", __name__)
 
-# ───────────────── Home page ───────────────── #
 @main.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         topic = request.form["topic"]
+        task_id = start_generate_notes_task(topic)
 
-        # defer import to avoid circular dependency
-        from tasks import generate_notes_task
-        task = generate_notes_task.delay(topic)
-
-        # If called via fetch (AJAX), return JSON with task_id
+        # AJAX (fetch) submit → return JSON
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            return jsonify(task_id=task.id), 202
+            return jsonify(task_id=task_id)
 
-        # Fallback for plain form posts (should rarely happen now)
-        return redirect(url_for("main.status", task_id=task.id))
+        # Normal form submit → redirect
+        return redirect(url_for("main.status", task_id=task_id))
 
     return render_template("index.html")
 
-# ───────────────── Status page ───────────────── #
 @main.route("/status/<task_id>")
 def status(task_id):
     return render_template("status.html", task_id=task_id)
 
-# JSON status endpoint
 @main.route("/api/status/<task_id>")
 def api_status(task_id):
-    task = AsyncResult(task_id)
-    return jsonify(
-        state=task.state,
-        result=task.result or {},
-        error=str(task.info) if task.failed() else None,
-    )
+    state, data = get_task_result(task_id)
+    return jsonify(state=state, result=data)
 
-# Download endpoint
 @main.route("/download/<task_id>")
 def download(task_id):
-    task = AsyncResult(task_id)
-    return send_file(task.result["pdf_path"], as_attachment=True)
+    state, data = get_task_result(task_id)
+    if state != "SUCCESS":
+        return "File not ready", 404
+    return send_file(data["pdf_path"], as_attachment=True)
