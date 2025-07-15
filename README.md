@@ -31,7 +31,7 @@ Note‑X is a Flask-based web application that generates concise PDF study notes
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/yourusername/note-x.git
+git clone https://github.com/divyanshpandit/note-x.git
 cd note-x
 python -m venv venv
 source venv/bin/activate     # on Windows: venv\Scripts\activate
