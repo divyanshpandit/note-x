@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card center" style="text-align:center;">
-  <div id="spinner" class="orbit-loader">
-    <div></div><div></div><div></div><div></div>
+<div class="card center gen-card">
+  <div class="pencil-wrapper">
+    <div class="pencil"></div>
+    <div class="line"></div>
   </div>
-  <h2 id="msg" style="margin-top:1.2rem;">Generating…</h2>
+
+  <h3 id="msg" class="gen-msg">
+    𝔊𝔢𝔫𝔢𝔯𝔞𝔱𝔦𝔫𝔤 𝔶𝔬𝔲𝔯 𝔫𝔬𝔱𝔢𝔰… 𝔭𝔩𝔢𝔞𝔰𝔢 𝔴𝔞𝔦𝔱
+  </h3>
 </div>
 {% endblock %}
 
@@ -16,15 +20,15 @@ async function poll() {
   const data = await res.json();
 
   if (data.state === "SUCCESS") {
-    document.getElementById("spinner").style.display = "none";
+    document.querySelector(".pencil-wrapper").style.display = "none";
     document.getElementById("msg").innerHTML =
       `<a class="dl-btn" href="/download/{{ task_id }}" download>⬇ Download PDF</a>`;
   } else if (data.state === "FAILURE") {
-    document.getElementById("spinner").style.display = "none";
+    document.querySelector(".pencil-wrapper").style.display = "none";
     document.getElementById("msg").textContent =
       "Failed: " + (data.result?.error || "unknown error");
   } else {
-    setTimeout(poll, 3000);
+    setTimeout(poll, 2500);
   }
 }
 poll();
