@@ -25,27 +25,6 @@ Note‑X is a Flask-based web application that generates concise PDF study notes
 
 ---
 
-## Folder Structure
-
-note-x/
-├── app/
-│ ├── init.py
-│ ├── routes.py
-│ ├── ai_agent.py
-│ └── pdf_generator.py
-├── static/
-│ ├── style.css
-│ └── chat.js
-├── templates/
-│ ├── base.html
-│ ├── index.html
-│ └── status.html
-├── tasks.py
-├── run.py
-├── requirements.txt
-└── README.md
-
----
 
 ## Installation
 
